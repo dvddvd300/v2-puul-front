@@ -96,13 +96,14 @@ export const loader: LoaderFunction = async ({
     },
   }).then((res) => { return res.json() });
 
-  const tasks = await fetch("https://puul-api.d300.workers.dev/tasks", {
+  const tasks = await fetch(`https://puul-api.d300.workers.dev/tasks?unassigned=true`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
       "Authorization": `${cookie.sessionKey}`,
     },
   }).then((res) => { return res.json() });
+  console.log(tasks);
 
   return { user, tasks };
 };

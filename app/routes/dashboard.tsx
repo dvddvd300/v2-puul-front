@@ -20,6 +20,8 @@ import {
   ServerIcon,
   SignalIcon,
   XMarkIcon,
+  PlusIcon,
+  ArrowRightOnRectangleIcon,
 } from '@heroicons/react/24/outline'
 import { Bars3Icon, ChevronRightIcon, ChevronUpDownIcon, MagnifyingGlassIcon } from '@heroicons/react/20/solid'
 
@@ -40,7 +42,8 @@ export const meta: MetaFunction = () => {
     { name: "description", content: "Welcome to Remix!" },
   ];
 };
-import type { LoaderFunction } from "@remix-run/cloudflare";
+import type { LoaderFunction, MetaFunction } from "@remix-run/cloudflare";
+import { redirect } from "@remix-run/cloudflare";
 
 export const loader: LoaderFunction = async ({
   request,
@@ -51,11 +54,18 @@ export const loader: LoaderFunction = async ({
 }) => {
   const { env } = context;
   const cookieHeader = request.headers.get("Cookie");
-  //parse the cookieheader to get the key value pair of the cookie
+  if (!cookieHeader) {
+    return redirect("/login");
+  }
   let cookie: { sessionKey?: string } = cookieHeader?.split(";").reduce((acc, cookie) => {
     const [key, value] = cookie.split("=");
     return { ...acc, [key.trim()]: value };
-  }, {});
+  }, {} as { sessionKey?: string });
+
+  //if the cookie is not present redirect to the login page
+  if (!cookie.sessionKey || cookie.sessionKey === "") {
+    return redirect("/login");
+  }
 
   // This is the cookieheader is used to querrythe key value pair of the cookie using cloudflare kv
 
@@ -66,7 +76,6 @@ export const loader: LoaderFunction = async ({
       "Authorization": `${cookie.sessionKey}`,
     },
   }).then((res) => { return res.json() });
-  console.log(user);
   return { user };
 };
 
@@ -75,15 +84,16 @@ export default function Index() {
   let data = useLoaderData();
   const location = useLocation();
   const [sidebarOpen, setSidebarOpen] = useState(false)
-
+  
   let navigation = [
     { name: 'Mis Tareas', href: '/dashboard/my-tasks', icon: FolderIcon },
     { name: 'Tareas sin asignar', href: '/dashboard/unassigned', icon: ServerIcon },
     { name: 'Tareas completadas', href: '/dashboard/completed', icon: SignalIcon },
-    { name: 'Todas las tareas', href: '/dashboard/tasks', icon: GlobeAltIcon },
+    { name: 'Todas las tareas', href: '/dashboard/tasks', icon: PlusIcon },
+    { name: 'Salir', href: '/logout', icon: ArrowRightOnRectangleIcon },
   ]
   return (
-    <div class="h-full bg-gray-900">
+    <div className="h-full bg-gray-900">
       <Dialog open={sidebarOpen} onClose={setSidebarOpen} className="relative z-50 xl:hidden">
         <DialogBackdrop
           transition

@@ -1,4 +1,6 @@
-import type { MetaFunction } from "@remix-run/cloudflare";
+import type { MetaFunction, LoaderFunction } from "@remix-run/cloudflare";
+import { redirect } from "@remix-run/react";
+
 
 export const meta: MetaFunction = () => {
   return [
@@ -7,12 +9,7 @@ export const meta: MetaFunction = () => {
   ];
 };
 
-export default function Index() {
-  return (
-    <div className="flex h-screen items-center justify-center">
-      This is a team task management app
-    </div>
-  );
+export const loader: LoaderFunction = async ({ request, context }) => {
+
+  return redirect("/dashboard");
 }
-
-
