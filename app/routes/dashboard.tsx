@@ -89,7 +89,8 @@ export default function Index() {
     { name: 'Mis Tareas', href: '/dashboard/my-tasks', icon: FolderIcon },
     { name: 'Tareas sin asignar', href: '/dashboard/unassigned', icon: ServerIcon },
     { name: 'Tareas completadas', href: '/dashboard/completed', icon: SignalIcon },
-    { name: 'Todas las tareas', href: '/dashboard/tasks', icon: PlusIcon },
+    { name: 'Todas las tareas', href: '/dashboard/tasks', icon: GlobeAltIcon },
+    { name: 'Nueva Tarea', href: '/dashboard/new', icon: PlusIcon },
     { name: 'Salir', href: '/logout', icon: ArrowRightOnRectangleIcon },
   ]
   return (
