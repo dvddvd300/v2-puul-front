@@ -4,8 +4,8 @@ import { redirect } from "@remix-run/react";
 
 export const meta: MetaFunction = () => {
   return [
-    { title: "New Remix App" },
-    { name: "description", content: "Welcome to Remix!" },
+        { title: "Team to-do app" },
+    { name: "description", content: "creado por david" },
   ];
 };
 
